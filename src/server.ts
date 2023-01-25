@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { Request, Response } from "express";
 
 import spending from './routers/spending.routers.js';
+import sessison from './routers/session.routers.js'
 
 const server = express();
 dotenv.config();
@@ -11,6 +12,7 @@ dotenv.config();
 server
     .use(cors())
     .use(express.json())
+    .use(sessison)
     .use(spending)
     .get("/health", (req: Request, res: Response) => { res.send('ok') })
 
