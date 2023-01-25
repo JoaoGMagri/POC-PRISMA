@@ -8,7 +8,7 @@ import { validationNewSpending } from "../service/spending.js";
 async function getSpending(req: Request, res: Response){
     try {
         const obj = await spendingQuery.allSpending();
-        res.send(obj.rows);
+        res.send(obj);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -19,7 +19,7 @@ async function getSpendingPrice(req: Request, res: Response){
 
     try {
         const obj = await spendingQuery.priceSpending(price);
-        res.send(obj.rows);
+        res.send(obj);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -50,9 +50,9 @@ async function putSpending(req: Request, res: Response){
             return res.send({message: validated.message}).status(409);
         }
         const existed = await spendingQuery.oneSpending(id)
-        if (existed.rowCount === 0) {
+        /* if (existed.rowCount === 0) {
             return res.sendStatus(409);
-        }
+        } */
         spendingQuery.updateSpending(obj, id);
         res.sendStatus(200);
     } catch (error) {
@@ -65,9 +65,9 @@ async function deleteSpending(req: Request, res: Response){
 
     try {
         const existed = await spendingQuery.oneSpending(id)
-        if (existed.rowCount === 0) {
+        /* if (existed.rowCount === 0) {
             return res.sendStatus(409);
-        }
+        } */
         spendingQuery.deleteSpending(id);
         res.sendStatus(200);
     } catch (error) {

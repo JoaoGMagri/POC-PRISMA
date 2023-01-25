@@ -1,40 +1,28 @@
 import { QueryResult } from "pg";
 
 import { SpendingEntity, Spending } from "../protocols/Spending.js";
-import { connection } from "../database/database.js";
+import prisma from "../database/database.js";
 
-async function allSpending(): Promise<QueryResult<SpendingEntity[]>> {
-    return connection.query(
-        `
-            SELECT * FROM spending;
-        `
-    )
+async function allSpending() {
+    return prisma.spending.findMany();
 }
-async function oneSpending(id: number): Promise<QueryResult<SpendingEntity>> {
-    return connection.query(
-        `
-            SELECT * FROM spending WHERE id = $1;
-        `,[id]
-    )
+async function oneSpending(id: number) {
+    return prisma.spending.findUnique({ where: { id: id } });
 }
-async function priceSpending(price: number): Promise<QueryResult<SpendingEntity[]>> {
-    return connection.query(
-        `
-            SELECT * FROM spending WHERE price <= $1;
-        `,[price]
-    )
+async function priceSpending(price: number) {
+    return prisma.spending.findMany({ where: { price: { lt: price } } });
 }
 async function newSpending(obj: Spending): Promise<void> {
-    connection.query(
+    /* connection.query(
         `
             INSERT INTO spending(name, price)
             VALUES($1, $2)
             
         `,[obj.name, obj.price]
-    )
+    ) */
 }
 async function updateSpending(obj: Spending, id:number): Promise<void> {
-    connection.query(
+    /* connection.query(
         `
             UPDATE 
                 spending 
@@ -44,18 +32,18 @@ async function updateSpending(obj: Spending, id:number): Promise<void> {
             WHERE
                 id = $3;
         `, [obj.name, obj.price, id]
-    )
+    ) */
 
 }
 async function deleteSpending(id: number): Promise<void> {
-    connection.query(
+    /* connection.query(
         `
             DELETE FROM
                 spending 
             WHERE
                 id = $1;
         `, [id]
-    )
+    ) */
 }
 
 export const spendingQuery = {
