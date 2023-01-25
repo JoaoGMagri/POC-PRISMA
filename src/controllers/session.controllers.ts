@@ -36,7 +36,6 @@ async function signup(req: Request, res: Response){
     }
 
 }
-
 async function signin(req: Request, res: Response) {
     const obj = req.body;
     const token = uuidv4();
@@ -74,7 +73,6 @@ async function signin(req: Request, res: Response) {
     }
 
 }
-
 
 export const sessionFunc = {
     signup,

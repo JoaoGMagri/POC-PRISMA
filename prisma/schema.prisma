@@ -18,8 +18,8 @@ model spending {
 
 model session {
   id        Int      @id @default(autoincrement())
-  idUser    Int
-  token     String
+  idUser    Int     
+  token     String   @unique
   createdAt DateTime @default(now()) @db.Date
   users     users    @relation(fields: [idUser], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -27,7 +27,7 @@ model session {
 model users {
   id        Int        @id(map: "users_pkey1") @default(autoincrement())
   name      String
-  email     String
+  email     String     @unique
   password  String
   createdAt DateTime   @default(now()) @db.Date
   session   session[]

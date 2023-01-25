@@ -1,6 +1,3 @@
-import { QueryResult } from "pg";
-
-import { SpendingEntity, Spending } from "../protocols/Spending.js";
 import prisma from "../database/database.js";
 
 async function singUpRep(obj) {
@@ -13,28 +10,28 @@ async function singUpRep(obj) {
         }
     });
 }
-
-async function validateEmail(email: string){
-    return await prisma.users.findMany({ where: { email: email } });
-}
-
-async function validateSession(id: number){
-    return await prisma.session.findMany({ where: { idUser: id } });
-}
-
 async function singInRep(id: number, token: string) {
     return await prisma.session.create({
         data: {
             idUser: id,
             token: token
         }
-    })
+    });
 }
-
+async function validateEmail(email: string){
+    return await prisma.users.findMany({ where: { email: email } });
+}
+async function validateSession(id: number){
+    return await prisma.session.findMany({ where: { idUser: id } });
+}
+async function validateToken(token: string){
+    return await prisma.session.findUnique({ where: { token: token || "" }, });
+}
 
 export const sessionRepositories = {
     singUpRep,
     singInRep,
     validateEmail,
-    validateSession
+    validateSession,
+    validateToken
 }

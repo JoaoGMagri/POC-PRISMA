@@ -3,54 +3,47 @@ import { QueryResult } from "pg";
 import { SpendingEntity, Spending } from "../protocols/Spending.js";
 import prisma from "../database/database.js";
 
-async function allSpending() {
-    return prisma.spending.findMany();
+async function allSpending(id: number) {
+  return prisma.spending.findMany({ where: { idUser: id } });
 }
-async function oneSpending(id: number) {
-    return prisma.spending.findUnique({ where: { id: id } });
+async function oneSpending(id: number, idUser: number) {
+  return prisma.spending.findMany({ where: { id, idUser } });
 }
-async function priceSpending(price: number) {
-    return prisma.spending.findMany({ where: { price: { lt: price } } });
+async function priceSpending(price: number, id: number) {
+  return prisma.spending.findMany({
+    where: {
+      price: { lte: price },
+      idUser: id,
+    },
+  });
 }
-async function newSpending(obj: Spending): Promise<void> {
-    /* connection.query(
-        `
-            INSERT INTO spending(name, price)
-            VALUES($1, $2)
-            
-        `,[obj.name, obj.price]
-    ) */
+async function newSpending(obj: Spending, idUser: number) {
+  return prisma.spending.create({
+    data: {
+      name: obj.name,
+      price: obj.price,
+      idUser,
+    },
+  });
 }
-async function updateSpending(obj: Spending, id:number): Promise<void> {
-    /* connection.query(
-        `
-            UPDATE 
-                spending 
-            SET
-                name=$1,
-                price=$2
-            WHERE
-                id = $3;
-        `, [obj.name, obj.price, id]
-    ) */
-
+async function updateSpending(obj: Spending, id: number) {
+  return prisma.spending.update({
+    where: { id },
+    data: {
+      name: obj.name,
+      price: obj.price,
+    },
+  });
 }
-async function deleteSpending(id: number): Promise<void> {
-    /* connection.query(
-        `
-            DELETE FROM
-                spending 
-            WHERE
-                id = $1;
-        `, [id]
-    ) */
+async function deleteSpending(id: number) {
+  return prisma.spending.delete({ where: { id } });
 }
 
 export const spendingQuery = {
-    allSpending,
-    oneSpending,
-    priceSpending,
-    newSpending,
-    updateSpending,
-    deleteSpending,
-}
+  allSpending,
+  oneSpending,
+  priceSpending,
+  newSpending,
+  updateSpending,
+  deleteSpending,
+};
